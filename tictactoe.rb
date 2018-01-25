@@ -1,38 +1,36 @@
 # --------Plateau de jeu ----------------------------------#
 class Board
-    attr_accessor :casesdisponibles
+    attr_accessor :cases
 
     def initialize
       @cases = []
-      @cases << 9.times {BoardCase.new(value)}
-      p boardgame
+      @cases << 9.times {BoardCase.new("vide")}
+      boardgame
     end
 
     def boardgame
-        puts "#{@cases[0].value} | #{@cases[1].value} | #{@cases[2].value}"
+        puts "| #{@cases[0].to_s} | #{@cases[1]} | #{@cases[2]} |"
         puts "-----------"
-        puts "#{@cases[3].value} | #{@cases[4].value} | #{@cases[5].value}"
+        puts "| #{@cases[3].to_s} | #{@cases[4]} | #{@cases[5]} |"
         puts "-----------"
-        puts "#{@cases[6].value} | #{@cases[1].value} | #{@cases[8].value}"
+        puts "| #{@cases[6].to_s} | #{@cases[1]} | #{@cases[8]} |"
     end
-
 
 end
 
-# --------Boardcase ----------------------------------#
-
+# -------- Cases du jeu ----------------------------------#
 class BoardCase
-    attr_accessor :value, :numbercase
-
-    def initialize(value=" ")
+    attr_accessor :value, :number
+    @@count = 0
+    def initialize(value)
       @value = value
+      @number = @@count + 1
+      @@count += 1
     end
-
-    def returnstatus
-      p "La case #{@numbercase} est #{@status}."
+    def to_s
+      # Renvoie la valeur au format string
+      return @value.to_s
     end
-
-
 end
 
 # -------- Player ----------------------------------#
@@ -71,15 +69,15 @@ class Game
   def initialize
     p "Hello, let's begin !"
     Player.new
-    p "Les deux joueurs sont : #{$player1} et #{$player2}."
+    p "The players are : #{$player1} and #{$player2}."
     Board.new
     @tour = 1
   end
 
   def nouveautour
     if @tour%2 == 1
-      p "Tour du joueur #{$player1}"
-      p "Selectionner une case"
+      p "Player's turn : #{$player1}"
+      p "Select one case"
       @casejouee = gets.to_i
         p $casesdisponibles
         if $casesdisponibles.include?(@casejouee)
@@ -88,7 +86,7 @@ class Game
           p "Case déjà jouée"
         end
     else
-      p "Tour du joueur #{$player2},  symbole : O "
+      p "Player's turn : #{$player2} "
     end
   end
 
