@@ -25,6 +25,12 @@ class Board
         print "\n"
     end
 
+    def remplircase(casejouee, form)
+      #La fonction va remplir la case [n-1] correspondant à la case n du tableau
+      #La case sera remplie de la forme du joueur ayant invoqué la fonction
+      @cases[casejouee-1] = form.to_s
+    end
+
 end
 
 # -------- Cases du jeu ----------------------------------#
@@ -37,35 +43,30 @@ class BoardCase
       @@count += 1
     end
     def to_s
-      # Renvoie la valeur au format string
-      return @value.to_s
+      return @value.to_s    # Renvoie la valeur au format string
     end
 end
 
 # -------- Player ----------------------------------#
 class Player
 
-  attr_accessor :player1 , :player2 , :casespossedees1 , :casespossedees2
+  attr_accessor :player1 , :player2 , :player1status, :player2status, :casespossedees1 , :casespossedees2
 
   def initialize
     p "What's the name of the first player ?"
-    $player1 = gets.chomp
-    @form = "X"
+    $player1 = gets.chomp   #On insere le nom du premier joueur
+    @form = "X"             #On détermine la forme qui le représente
     p "You are the 'X' ! "
-    print "\n"
+    $player1winner = false
     @casespossedees1 = []
+    print "\n"
+
     p "What's the name of the second player ?"
     $player2 = gets.chomp
     @form = "O"
     p "You are the 'O' ! "
     @casespossedees2 = []
-  end
-
-  def player1tour(casejouee)
-    @casespossedees1 << casejouee
-    p "vous possedez les cases : #{@casespossedees1}"
-
-    # $player1.choix
+    $player2winner = false
   end
 
 end
@@ -78,31 +79,68 @@ class Game
 
   def initialize
     p "Hello, let's begin !"
+
+    #On appelle la création des joueurs
     Player.new
     p "The players are : #{$player1} and #{$player2}."
-    Board.new
+    @newboard = Board.new
     @tour = 1
+    @casedejajouee = []
+    nouveautour
   end
 
   def nouveautour
-    if @tour%2 == 1
-      p "Player's turn : #{$player1}"
-      p "Select one case"
-      @casejouee = gets.to_i
-        p $casesdisponibles
-        if $casesdisponibles.include?(@casejouee)
-          return casejouee
-        else
-          p "Case déjà jouée"
-        end
-    else
-      p "Player's turn : #{$player2} "
-    end
-  end
+      unless ($player1winner || $player2status)
+        if @tour%2 == 1
+            p "Player's turn : #{$player1}"
+            p "Select one case"
+            casejouee = gets.chomp
+            if casejouee.match(/[1-9]/)  # Regexp pour limiter les valeurs possibles aux chiffres entre 0 et 9
 
-end
+              if @casedejajouee.include?(casejouee)
+                p "Case déjà jouée"
+                nouveautour
+              else
+                @casedejajouee << casejouee
+                @newboard.remplircase(casejouee.to_i,"X")
+                @newboard.boardgame
+                @tour +=1
+                nouveautour
+              end
+
+            else
+              p "format incorrect"
+              nouveautour
+            end # Fin test matching 1-9
+
+        else
+            p "Player's turn : #{$player2}"
+            p "Select one case"
+            casejouee = gets.chomp
+            if casejouee.match(/[1-9]/)  # Regexp pour limiter les valeurs possibles aux chiffres entre 0 et 9
+
+                if @casedejajouee.include?(casejouee)
+                  p "Case déjà jouée"
+                  nouveautour
+                else
+                  @casedejajouee << casejouee
+                  @newboard.remplircase(casejouee.to_i,"O")
+                  @newboard.boardgame
+                  @tour +=1
+                  nouveautour
+                end
+
+            else
+              p "format incorrect"
+              nouveautour
+            end # Fin test matching 1-9
+
+        end # Fin Tour
+      end #Fin unless
+  end #Fin nouveautour
+
+end   # Fin Class Game
 
 # ------------------------------  Lancement  ----------------------------------#
-
 
 jeu = Game.new
