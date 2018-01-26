@@ -3,17 +3,26 @@ class Board
     attr_accessor :cases
 
     def initialize
-      @cases = []
-      @cases << 9.times {BoardCase.new("vide")}
+      #On crée le tableau de jeu sous forme d'une matrice de 9 cases.
+      # cf. http://ruby-doc.org/core-2.5.0/Array.html
+      # On crée 9 cases à partir de la classe Boardcase, et prenant comme valeur initiale " "
+      @cases = Array.new(9, BoardCase.new("_"))
+
+      #On appelle la fonction boardgame
       boardgame
     end
 
     def boardgame
-        puts "| #{@cases[0].to_s} | #{@cases[1]} | #{@cases[2]} |"
-        puts "-----------"
-        puts "| #{@cases[3].to_s} | #{@cases[4]} | #{@cases[5]} |"
-        puts "-----------"
-        puts "| #{@cases[6].to_s} | #{@cases[1]} | #{@cases[8]} |"
+      #La fonction boardgame affiche le plateau de jeu
+        print "\n"
+        puts "-------------"
+        puts "| #{@cases[0]} | #{@cases[1]} | #{@cases[2]} |"
+        puts "-------------"
+        puts "| #{@cases[3]} | #{@cases[4]} | #{@cases[5]} |"
+        puts "-------------"
+        puts "| #{@cases[6]} | #{@cases[7]} | #{@cases[8]} |"
+        puts "-------------"
+        print "\n"
     end
 
 end
@@ -23,7 +32,7 @@ class BoardCase
     attr_accessor :value, :number
     @@count = 0
     def initialize(value)
-      @value = value
+      @value = value.to_s
       @number = @@count + 1
       @@count += 1
     end
@@ -43,6 +52,7 @@ class Player
     $player1 = gets.chomp
     @form = "X"
     p "You are the 'X' ! "
+    print "\n"
     @casespossedees1 = []
     p "What's the name of the second player ?"
     $player2 = gets.chomp
