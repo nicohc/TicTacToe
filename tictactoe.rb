@@ -106,18 +106,19 @@ class Game
     #On appelle la création du joueur1
     $player2 = Player.new(playername2, sign2)
 
-    p "Les joueurs sont: 'playername1' and 'playername2'."
+    p "Les joueurs sont: '#{playername1}' and '#{playername2}'."
     @newboard = Board.new  #On initialise un nouveau plateau de jeu
     @tour = 1
     @casedejajouee = []   #On liste ici les cases déjà remplies
     nouveautour           #On lance le premier tour
+    p "Les cases sont numérotées de 1 à 9 en commencant en haut à gauche pour finir en bas à droite."
   end
 
   def nouveautour
       unless @newboard.win_cases || @tour > 10   #A moins qu'il y ait un vainqueur ou que l'on ait fini de remplir le tableau , on lance un nouveau tour
         if @tour%2 == 1
             p "Au tour de : #{$player1.playername}"
-            p "Selectionner une case"
+            p "Selectionner une case (Entrez un chiffre de 1 à 9)"
             casejouee = gets.chomp
             if casejouee.match(/[1-9]/)  # Regexp pour limiter les valeurs possibles aux chiffres entre 0 et 9
 
@@ -139,7 +140,7 @@ class Game
 
         else
             p "Au tour de : #{$player2.playername}"
-            p "Selectionner une case"
+            p "Selectionner une case  (Entrez un chiffre de 1 à 9)"
             casejouee = gets.chomp
             if casejouee.match(/[1-9]/)  # Regexp pour limiter les valeurs possibles aux chiffres entre 0 et 9
 
